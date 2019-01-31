@@ -5,7 +5,9 @@ To-do list:
 2.	Also by session, to highlight which country dominates either of the two sessions
 3.	Total medal distribution over the years
 4.	Highlight the ratio of the male to female participation:
+
     A. Over the years(games) - Overall (Done)
+    
     B. Over the years (games) - By Country (Done)
 5.	Representation of every country in each sport – highest and lowest (Done)
 6.	Plot the trendline of the number of participants over the years
