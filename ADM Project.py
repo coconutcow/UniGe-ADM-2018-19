@@ -52,3 +52,82 @@ df1=df1.reset_index()
 df1.columns=['Year','MedalsWon']
 print(df1.sort_values(by='MedalsWon',ascending=False))
 
+
+
+
+
+
+
+########## PySpark ##########
+
+import numpy as np
+import findspark
+import matplotlib.pyplot as plt
+findspark.init('C:/spark/')
+from pyspark.sql import SparkSession
+
+spark1 = SparkSession.builder.appName("test").getOrCreate()
+df = spark1.read.csv("120-years-of-olympic-history-athletes-and-results/test.csv",inferSchema = True, header=True, sep = ";")
+
+def plot_mf_partifipation(m,f,ye,title = ""):
+    """
+    Inputs, all numpy arrays
+    m: list of year paired with male count [[1900,200],[1904,500],...[2016,2000]]
+    f: list of year paired with female count
+    ye: list of years [1900, 1904, ..., 2016]
+    """
+    
+    y_males = np.array([i[0] for i in m])
+    y_females = np.array([i[0] for i in f])
+    c_males = np.array([i[1] for i in m])
+    c_females = np.array([i[1] for i in f])
+    
+    count_males = np.zeros(ye.size)
+    count_females = np.zeros(ye.size)
+
+    i = 0
+    for y in ye:
+        index_males, = np.where(y_males == y)
+        if index_males.size == 1:
+            count_males[i] = c_males[index_males]
+        index_females, = np.where(y_females == y)
+        if index_females.size == 1:
+            count_females[i] = c_females[index_females]
+        i += 1
+
+    N = ye.size
+    menMeans = count_males
+    womenMeans = count_females
+    ind = np.arange(N)    # the x locations for the groups
+    width = 0.35       # the width of the bars: can also be len(x) sequence
+
+    plt.subplots(figsize=(20, 10))
+    p1 = plt.bar(ind, menMeans, width)
+    p2 = plt.bar(ind, womenMeans, width,
+                 bottom=menMeans)
+
+    plt.ylabel('Count')
+    plt.title(title)
+    plt.xticks(ind, ye)
+    plt.legend((p1[0], p2[0]), ('Men', 'Women'))
+    plt.show()
+    return None
+
+count_by_year = np.array(df.groupBy("Sex","Year","Season").count().sort("Year","Sex").collect())
+years = np.array(df.select("Year","Season").distinct().sort("Year").collect())
+
+males_s = np.array([i for i in count_by_year if i[0] == 'M' and i[2] == 'Summer'])[:,1::2]
+females_s = np.array([i for i in count_by_year if i[0] == 'F' and i[2] == 'Summer'])[:,1::2]
+years_s = np.array([i[0] for i in years if i[1] == "Summer"])
+plot_mf_partifipation(males_s,females_s,years_s,"Women to men participation ratio over the years (Summer)")
+
+males_w = np.array([i for i in count_by_year if i[0] == 'M' and i[2] == 'Winter'])[:,1::2]
+females_w = np.array([i for i in count_by_year if i[0] == 'F' and i[2] == 'Winter'])[:,1::2]
+years_w = np.array([i[0] for i in years if i[1] == "Winter"])
+plot_mf_partifipation(males_w,females_w,years_w,"Women to men participation ratio over the years (Winter)") 
+
+countries = np.array(df.groupBy("NOC").count().orderBy("count",ascending = False).limit(20).select("NOC").collect())
+count_country = np.array(df.groupBy("Sex","NOC").count().sort("Sex").collect())
+males_c = np.array([i for i in count_country if i[0] == 'M' and i[1] in countries])[:,1:3]
+females_c = np.array([i for i in count_country if i[0] == 'F' and i[1] in countries])[:,1:3]
+plot_mf_partifipation(males_c,females_c,countries,"Women to men participation ratio of the top 20")
