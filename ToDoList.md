@@ -1,7 +1,7 @@
 # UniGe-ADM-2018-19
 
 To-do list:
-1.	Enlist the number of medals won by each country by each session
+1.	Enlist the number of medals won by each country by each session (Done)
 2.	Also by session, to highlight which country dominates either of the two sessions
 3.	Total medal distribution over the years
 4.	Highlight the ratio of the male to female participation over the years:
