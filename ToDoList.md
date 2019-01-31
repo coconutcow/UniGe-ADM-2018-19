@@ -8,7 +8,7 @@ To-do list:
     Overall
     By Country
     Plot the graph of the highest representation
-5.	Representation of every country in each sport – highest and lowest
+5.	Representation of every country in each sport – highest and lowest (Done)
 6.	Plot the trendline of the number of participants over the years
 7.	A histogram of the top 3 participating countries, for each session, over the years
 8.	Plot a bar graph of the top 5 (by country) average weights and heights
