@@ -110,6 +110,8 @@ def plot_mf_partifipation(m,f,ye,title = ""):
     plt.title(title)
     plt.xticks(ind, ye)
     plt.legend((p1[0], p2[0]), ('Men', 'Women'))
+    for i in ind:
+        plt.text(i-0.4,menMeans[i]+womenMeans[i]+20,str(round(100*womenMeans[i]/(menMeans[i]+womenMeans[i]),2))+'%',fontsize=10)
     plt.show()
     return None
 
