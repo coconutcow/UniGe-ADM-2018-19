@@ -113,6 +113,31 @@ def plot_mf_partifipation(m,f,ye,title = ""):
     plt.show()
     return None
 
+def plot_feature(data,yl = 'Features',xl = 'Feature measurements', t = 'Feature comparison'):
+    """
+    Inputs
+    data: numpy array of form [[feature1,float_value1],[feature2,float_value2],....]
+    yl: y axis label
+    xl: x axis label
+    t:  title
+    """
+    d_feature = data[:,0]
+    d_value = data[:,1]
+    
+    ind = np.arange(len(d_feature))
+    values = np.array([float(i) for i in d_value])
+    
+    plt.bar(ind,values,align='center')
+    plt.xticks(ind,d_feature)
+    plt.ylim(np.min(values)-10,np.max(values)+5)
+    plt.ylabel(yl)
+    plt.xlabel(xl)
+    plt.title(t)
+    plt.show
+    
+    return None
+
+#Solve Query 5
 count_by_year = np.array(df.groupBy("Sex","Year","Season").count().sort("Year","Sex").collect())
 years = np.array(df.select("Year","Season").distinct().sort("Year").collect())
 
@@ -126,8 +151,15 @@ females_w = np.array([i for i in count_by_year if i[0] == 'F' and i[2] == 'Winte
 years_w = np.array([i[0] for i in years if i[1] == "Winter"])
 plot_mf_partifipation(males_w,females_w,years_w,"Women to men participation ratio over the years (Winter)") 
 
+#Solve Query 6
 countries = np.array(df.groupBy("NOC").count().orderBy("count",ascending = False).limit(20).select("NOC").collect())
 count_country = np.array(df.groupBy("Sex","NOC").count().sort("Sex").collect())
 males_c = np.array([i for i in count_country if i[0] == 'M' and i[1] in countries])[:,1:3]
 females_c = np.array([i for i in count_country if i[0] == 'F' and i[1] in countries])[:,1:3]
 plot_mf_partifipation(males_c,females_c,countries,"Women to men participation ratio of the top 20")
+
+#Solve Query 10
+avg_weight = np.array(df.groupBy("NOC").agg(F.mean("Weight")).orderBy("avg(Weight)",ascending = False).limit(10).collect())
+avg_height = np.array(df.groupBy("NOC").agg(F.mean("Height")).orderBy("avg(Height)",ascending = False).limit(10).collect())
+plot_feature(avg_weight,"Weight (kg)","Countries","Top 10 average weights by country")
+plot_feature(avg_height,"Height (cm)","Countries","Top 10 average heights by country")
