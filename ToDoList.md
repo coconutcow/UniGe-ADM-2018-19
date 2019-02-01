@@ -9,11 +9,10 @@ To-do list:
 6.  Highlight the ratio of the male to female participation:Over the years (games) - By Country (Done)
 7.	Representation of every country in each sport – highest and lowest (Done)
 8.	Plot the trendline of the number of participants over the years
-9.	A histogram of the top 3 participating countries, for each session, over the years
+9.	A histogram of the top 3 participating countries, for each session, over the years (Done)
 10.	Plot a bar graph of the top 5 (by country) average weights and heights (Done)
-11.	Top 5 players:
-    11. By medal count, and also give the breakup of which medals were won
-    12. Won gold medal
-    13. Maximum representation by number of years
-    14. Youngest and Oldest players
+11. Top 5 players:By medal count, and also give the breakup of which medals were won
+12. Top 5 players:Won gold medal
+13. Top 5 players:Maximum representation by number of years
+14. Top 5 players:Youngest and Oldest players
 15. Players with most number of sports participated (distinct)
