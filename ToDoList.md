@@ -10,7 +10,7 @@ To-do list:
 7.	Representation of every country in each sport – highest and lowest (Done)
 8.	Plot the trendline of the number of participants over the years
 9.	A histogram of the top 3 participating countries, for each session, over the years
-10.	Plot a bar graph of the top 5 (by country) average weights and heights
+10.	Plot a bar graph of the top 5 (by country) average weights and heights (Done)
 11.	Top 5 players:
     11. By medal count, and also give the breakup of which medals were won
     12. Won gold medal
