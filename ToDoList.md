@@ -15,7 +15,7 @@ To-do list:
     C. Bar Graph of highest participation by years - Top 10 (Done)
 10.	Plot a bar graph of the top 5 (by country) average weights and heights (Done)
 11. Top 5 players:By medal count, and also give the breakup of which medals were won (Done)
-12. Top 5 players:Won gold medal
+12. Top 5 players:Won gold medal (Done)
 13. Top 5 players:Maximum representation by number of years
 14. Top 5 players:Youngest and Oldest players
 15. Players with most number of sports participated (distinct)
