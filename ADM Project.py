@@ -22,7 +22,7 @@ df1=df[['Country','Games','Medal']].copy()
 df1=df1[df1.Medal!='Participated']
 print(df1.groupby(['Country','Games','Medal']).size())
 
-#Solve Query5
+#Solve Query7
 df1=df[['ID','Country','Year','Sport']].copy()
 length1 = len(df1) 
 df1.sort_values('ID',inplace=True)
@@ -35,7 +35,7 @@ df2.columns=['Country','Representation']
 print('Highest Representation so far:',df2.loc[df2['Representation'].idxmax()])
 print('Lowest Representation so far:',df2.loc[df2['Representation'].idxmin()])
 
-#Solve Query3
+#Solve Query4
 df1=df[['Country','Year','Medal']].copy()
 df1=df1[df1.Medal !='Participated']
 df1=df1.groupby(['Country']).size()
@@ -44,7 +44,7 @@ df1.columns=['Country','Distribution']
 print('Highest Medals won so far:',df1.loc[df1['Distribution'].idxmax()])
 print('Lowest Medals won so far:',df1.loc[df1['Distribution'].idxmin()])
 
-#Solve Query4
+#Solve Query3
 df1=df[['Year','Medal']].copy()
 df1=df1[df1.Medal !='Participated']
 df1=df1.groupby(['Year']).size()
