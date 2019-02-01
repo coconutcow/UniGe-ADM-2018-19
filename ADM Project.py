@@ -128,17 +128,17 @@ def plot_feature(data,yl = 'Features',xl = 'Feature measurements', t = 'Feature 
     
     ind = np.arange(len(d_feature))
     values = np.array([float(i) for i in d_value])
-    
+    w = 0.75
     
     plt.subplots(figsize=(20, 10))
-    plt.bar(ind,values,align='center')
+    plt.bar(ind,values,align='center',width = w)
     plt.xticks(ind,d_feature)
     plt.ylim(np.min(values)-10,np.max(values)+5)
     plt.ylabel(yl)
     plt.xlabel(xl)
     plt.title(t)
     for i in ind:
-        plt.text(i-0.2,values[i]+1,round(values[i],2),fontsize=16)
+        plt.text(i-w/3,values[i]+1,round(values[i],2),fontsize=16)
     plt.show
     
     return None
