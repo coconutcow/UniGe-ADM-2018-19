@@ -110,6 +110,10 @@ df1.columns=['Name','SportsPlayed']
 df1.sort_values('SportsPlayed',inplace=True,ascending=False)
 df1=df1.head(10)
 
+for i in df1.values:
+    print(i[0]+':')
+    print(', '.join(df.loc[df['Name']== i[0]]['Sport'].drop_duplicates().values))
+
 """for i in df:
     if df.row['Name']==df1.row['Name']:
         print(df1.row['Name'])
