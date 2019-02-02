@@ -2,7 +2,7 @@
 
 To-do list:
 1.	Enlist the number of medals won by each country by each session (Done)
-2.	Also by session, to highlight which country dominates either of the two sessions
+2.	Also by session, to highlight which country dominates either of the two sessions (Done)
 3.	Total medal distribution over the years (Done)
 4.  Highest medals won so far and lowest medals won so far (Done)
 5.	Highlight the ratio of the male to female participation:Over the years(games) - Overall (Done)
