@@ -23,6 +23,35 @@ df1=df[['Country','Games','Medal']].copy()
 df1=df1[df1.Medal!='Participated']
 print(df1.groupby(['Country','Games','Medal']).size())
 
+#Solve Query2
+df1=df[['Country','Season','Medal']].copy()
+df1=df1[df1.Medal!='Participated']
+df1=df1.groupby(['Country','Season']).size()
+df1=df1.reset_index()
+df1.columns=['Country','Season','MedalsWon']
+dfsummer=df1[df1.Season != 'Winter']
+dfwinter=df1[df1.Season != 'Summer']
+print('Highest Medals won so far in Summer Games:','\n',dfsummer.loc[dfsummer['MedalsWon'].idxmax()])
+print('Highest Medals won so far in Winter Games:','\n',dfwinter.loc[dfwinter['MedalsWon'].idxmax()])
+
+
+#Solve Query3
+df1=df[['Year','Medal']].copy()
+df1=df1[df1.Medal !='Participated']
+df1=df1.groupby(['Year']).size()
+df1=df1.reset_index()
+df1.columns=['Year','MedalsWon']
+print(df1.sort_values(by='MedalsWon',ascending=False))
+
+#Solve Query4
+df1=df[['Country','Year','Medal']].copy()
+df1=df1[df1.Medal !='Participated']
+df1=df1.groupby(['Country']).size()
+df1=df1.reset_index()
+df1.columns=['Country','Distribution']
+print('Highest Medals won so far:',df1.loc[df1['Distribution'].idxmax()])
+print('Lowest Medals won so far:',df1.loc[df1['Distribution'].idxmin()])
+
 #Solve Query7
 df1=df[['ID','Country','Year','Sport']].copy()
 length1 = len(df1) 
@@ -35,23 +64,6 @@ df2=df2.reset_index()
 df2.columns=['Country','Representation']
 print('Highest Representation so far:',df2.loc[df2['Representation'].idxmax()])
 print('Lowest Representation so far:',df2.loc[df2['Representation'].idxmin()])
-
-#Solve Query4
-df1=df[['Country','Year','Medal']].copy()
-df1=df1[df1.Medal !='Participated']
-df1=df1.groupby(['Country']).size()
-df1=df1.reset_index()
-df1.columns=['Country','Distribution']
-print('Highest Medals won so far:',df1.loc[df1['Distribution'].idxmax()])
-print('Lowest Medals won so far:',df1.loc[df1['Distribution'].idxmin()])
-
-#Solve Query3
-df1=df[['Year','Medal']].copy()
-df1=df1[df1.Medal !='Participated']
-df1=df1.groupby(['Year']).size()
-df1=df1.reset_index()
-df1.columns=['Year','MedalsWon']
-print(df1.sort_values(by='MedalsWon',ascending=False))
 
 #Solve Query9A
 df1=df[['ID','Country','Season','Sport']].copy()
@@ -87,7 +99,7 @@ df1.sort_values('Representation',inplace=True,ascending=False)
 df1=df1.head(10)
 df1.plot(kind='bar',title='Bar Graph: Representation of top 10 countries',x='Country',y='Representation',legend=False)
 
-#Solve Query9C
+#Solve Query9C and 2
 df1=df[['ID','Year']].copy()
 length1 = len(df1) 
 df1.sort_values('ID',inplace=True)
@@ -99,7 +111,9 @@ df1=df1.reset_index()
 df1.columns=['Year','Representation']
 df1.sort_values('Representation',inplace=True,ascending=False)
 df1=df1.head(10)
+df1.sort_values('Year',inplace=True,ascending=True)
 df1.plot(kind='bar',title='Bar Graph: Highest participation over the years',x='Year',y='Representation',legend=False)
+df1.plot(kind='line',title='Bar Graph: Highest participation over the years',x='Year',y='Representation',legend=False)
 
 #Solve Query15
 df1=df[['Name','Sport']].copy()
@@ -113,12 +127,6 @@ df1=df1.head(10)
 for i in df1.values:
     print(i[0]+':')
     print(', '.join(df.loc[df['Name']== i[0]]['Sport'].drop_duplicates().values))
-
-"""for i in df:
-    if df.row['Name']==df1.row['Name']:
-        print(df1.row['Name'])
-    for j,row in df1.iterrows():
-        print(df.row['Sport'])"""
 
 df1.plot(kind='bar',title='Bar Graph: Highest participation over the years',x='Name',y='SportsPlayed',legend=False)
 
