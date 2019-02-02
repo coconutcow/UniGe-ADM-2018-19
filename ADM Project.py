@@ -3,6 +3,7 @@
 #Libraries
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 #Importing the Dataframe
 df = pd.read_csv('DataSet1.csv')
@@ -51,6 +52,72 @@ df1=df1.groupby(['Year']).size()
 df1=df1.reset_index()
 df1.columns=['Year','MedalsWon']
 print(df1.sort_values(by='MedalsWon',ascending=False))
+
+#Solve Query9A
+df1=df[['ID','Country','Season','Sport']].copy()
+length1 = len(df1) 
+df1.sort_values('ID',inplace=True)
+df1.drop_duplicates(keep=False,inplace=True)
+length2 = len(df1) 
+print('Difference after removing duplicates:',' ',length1,' ',length2)
+df2=df1.groupby(['Country','Season']).size()
+df2=df2.reset_index()
+df2.columns=['Country','Season','Representation']
+dfsummer=df2[df2.Season != 'Winter']
+dfwinter=df2[df2.Season != 'Summer']
+dfsummer.sort_values('Representation',inplace=True,ascending=False)
+dfsummer=dfsummer.head(10)
+dfwinter.sort_values('Representation',inplace=True,ascending=False)
+dfwinter=dfwinter.head(10)
+dfsummer.plot(kind='bar',title='Bar Graph Summer: Representation of top 10 countries',x='Country',y='Representation',legend=False)
+dfwinter.plot(kind='bar',title='Bar Graph Winter: Representation of top 10 countries',x='Country',y='Representation',legend=False)
+
+
+#Solve Query9B
+df1=df[['ID','Country','Year']].copy()
+length1 = len(df1) 
+df1.sort_values('ID',inplace=True)
+df1.drop_duplicates(keep=False,inplace=True)
+length2 = len(df1) 
+print('Difference after removing duplicates:',' ',length1,' ',length2)
+df1=df1.groupby(['Country']).size()
+df1=df1.reset_index()
+df1.columns=['Country','Representation']
+df1.sort_values('Representation',inplace=True,ascending=False)
+df1=df1.head(10)
+df1.plot(kind='bar',title='Bar Graph: Representation of top 10 countries',x='Country',y='Representation',legend=False)
+
+#Solve Query9C
+df1=df[['ID','Year']].copy()
+length1 = len(df1) 
+df1.sort_values('ID',inplace=True)
+df1.drop_duplicates(keep=False,inplace=True)
+length2 = len(df1) 
+print('Difference after removing duplicates:',' ',length1,' ',length2)
+df1=df1.groupby(['Year']).size()
+df1=df1.reset_index()
+df1.columns=['Year','Representation']
+df1.sort_values('Representation',inplace=True,ascending=False)
+df1=df1.head(10)
+df1.plot(kind='bar',title='Bar Graph: Highest participation over the years',x='Year',y='Representation',legend=False)
+
+#Solve Query15
+df1=df[['Name','Sport']].copy()
+df1=df1.groupby(['Name','Sport']).size()
+df1=df1.groupby(['Name']).size()
+df1=df1.reset_index()
+df1.columns=['Name','SportsPlayed']
+df1.sort_values('SportsPlayed',inplace=True,ascending=False)
+df1=df1.head(10)
+
+"""for i in df:
+    if df.row['Name']==df1.row['Name']:
+        print(df1.row['Name'])
+    for j,row in df1.iterrows():
+        print(df.row['Sport'])"""
+
+df1.plot(kind='bar',title='Bar Graph: Highest participation over the years',x='Name',y='SportsPlayed',legend=False)
+
 
 
 
