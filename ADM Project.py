@@ -143,6 +143,56 @@ def plot_feature(data,yl = 'Features',xl = 'Feature measurements', t = 'Feature 
     
     return None
 
+def plot_bsg_distribution(b,s,g,athletes):
+    """
+    Inputs, all numpy arrays
+    b,s,g: bronze, silver, gold array of form [[athlete name, medal count],...]
+    atheletes: list of atheletes [Phelps, Takashi Ono, ...]
+    """
+    
+    y_bronze = np.array([i[0] for i in b])
+    y_silver = np.array([i[0] for i in s])
+    y_gold = np.array([i[0] for i in g])
+    c_bronze = np.array([i[1] for i in b])
+    c_silver = np.array([i[1] for i in s])
+    c_gold = np.array([i[1] for i in g])
+    
+    count_bronze = np.zeros(athletes.size)
+    count_silver = np.zeros(athletes.size)
+    count_gold = np.zeros(athletes.size)
+
+    i = 0
+    for a in athletes:
+        index_bronze, = np.where(y_bronze == a)
+        if index_bronze.size == 1:
+            count_bronze[i] = c_bronze[index_bronze]
+        index_silver, = np.where(y_silver == a)
+        if index_silver.size == 1:
+            count_silver[i] = c_silver[index_silver]
+        index_gold, = np.where(y_gold == a)
+        if index_gold.size == 1:
+            count_gold[i] = c_gold[index_gold]
+        i += 1
+
+    N = athletes.size
+    ind = np.arange(N)    # the x locations for the groups
+    width = 0.75       # the width of the bars: can also be len(x) sequence
+
+    plt.subplots(figsize=(20, 10))
+    p1 = plt.bar(ind, count_bronze, width, color = 'brown', alpha = 0.5)
+    p2 = plt.bar(ind, count_silver, width, color = 'gray', alpha = 0.7,
+                 bottom=count_bronze)
+    p3 = plt.bar(ind, count_gold, width, color = 'gold', alpha = 0.5, 
+                 bottom=count_silver+count_bronze)
+
+    plt.ylabel('Count')
+    plt.title('Medal count')
+    plt.xticks(ind, athletes,rotation=10)
+    plt.legend((p1[0], p2[0], p3[0]), ('Bronze', 'Silver', 'Gold'))
+    plt.show()
+    
+    return None
+
 #Solve Query 5
 count_by_year = np.array(df.groupBy("Sex","Year","Season").count().sort("Year","Sex").collect())
 years = np.array(df.select("Year","Season").distinct().sort("Year").collect())
@@ -169,3 +219,36 @@ avg_weight = np.array(df.groupBy("NOC").agg(F.mean("Weight")).orderBy("avg(Weigh
 avg_height = np.array(df.groupBy("NOC").agg(F.mean("Height")).orderBy("avg(Height)",ascending = False).limit(10).collect())
 plot_feature(avg_weight,"Weight (kg)","Countries","Top 10 average weights by country")
 plot_feature(avg_height,"Height (cm)","Countries","Top 10 average heights by country")
+
+#Solve Query 11
+medals = ["Gold","Silver","Bronze"]
+medals_total = np.array(df.filter(df.Medal.isin(medals)).groupBy("Name").count().orderBy("count",ascending = False).limit(10).collect())
+top_athletes = [i for i in medals_total[:,0]]
+medals = np.array(df.filter(df.Name.isin(top_athletes)).filter(df.Medal.isin(medals)).groupBy("Name","Medal").count().orderBy("count",ascending = False).collect())
+
+gold_medals = np.array([i[::2] for i in medals if i[1] == "Gold"])
+silver_medals = np.array([i[::2] for i in medals if i[1] == "Silver"])
+bronze_medals = np.array([i[::2] for i in medals if i[1] == "Bronze"])
+
+plot_bsg_distribution(bronze_medals,silver_medals,gold_medals,np.array(top_athletes))
+
+#Solve Query 12
+medals = ["Gold"]
+gold_medals_total = np.array(df.filter(df.Medal.isin(medals)).groupBy("Name").count().orderBy("count",ascending = False).limit(10).collect())
+print("Top 10 gold medal winners")
+for i in range(gold_medals_total.shape[0]):
+    print(str(i+1)+'.',gold_medals_total[i,0],":",gold_medals_total[i,1])
+    
+#Solve Query 14
+dropAge = ['NA']
+dropSport = ["Art Competitions"]
+youngest_athletes = np.array(df.filter(~df.Age.isin(dropAge)).groupBy("Name","Age","Year","Sport").count().orderBy("Age", ascending = True).select("Name","Age","Year","Sport").limit(10).collect())
+oldest_athletes = np.array(df.filter(~df.Age.isin(dropAge)).filter(~df.Sport.isin(dropSport)).groupBy("Name","Age","Year","Sport").count().orderBy("Age", ascending = False).select("Name","Age","Year","Sport").limit(10).collect())
+
+print("Top 10 youngest athletes, year of participation and sport")
+for i in range(youngest_athletes.shape[0]):
+    print(str(i+1)+".",youngest_athletes[i,0]+", ",youngest_athletes[i,1]+", "+youngest_athletes[i,2] +", "+youngest_athletes[i,3])
+    
+print("Top 10 oldest athletes, year of participation and sport")
+for i in range(oldest_athletes.shape[0]):
+    print(str(i+1)+".",oldest_athletes[i,0]+", ",oldest_athletes[i,1]+", "+oldest_athletes[i,2]+", "+oldest_athletes[i,3])
