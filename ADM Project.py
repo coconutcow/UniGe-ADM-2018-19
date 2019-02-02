@@ -239,6 +239,17 @@ print("Top 10 gold medal winners")
 for i in range(gold_medals_total.shape[0]):
     print(str(i+1)+'.',gold_medals_total[i,0],":",gold_medals_total[i,1])
     
+#Solve Query 13
+top_years_participated = np.array(df.select("Name","Year").distinct().groupBy("Name").count().orderBy("count",ascending = False).limit(10).collect())
+athletes = [i[0] for i in top_years_participated]
+years_participated = df.select("Name","Year").filter(df.Name.isin(athletes)).distinct().groupBy('Name').agg(F.collect_list("Year")).collect()
+athletes = [i[0] for i in years_participated]
+years = [sorted(i[1]) for i in years_participated]
+
+print("Top 10 athletes on years participated")
+for i in range(top_years_participated.shape[0]):
+    print(str(i+1)+".",top_years_participated[i,0]+',',top_years_participated[i,1]+',',years[athletes.index(top_years_participated[i,0])])
+    
 #Solve Query 14
 dropAge = ['NA']
 dropSport = ["Art Competitions"]
