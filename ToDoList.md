@@ -21,3 +21,5 @@ To-do list:
 15. Players with most number of sports participated (distinct) (Done)
 16. Players who have won medals in Swimming and their height is above the average height
 17. Players who have won medals in Weightlifting and their weight is above the average weight
+18. City where the olympics have been hosted the most number of times
+19. Average Height and Weight of the players over intervals of 10 years
