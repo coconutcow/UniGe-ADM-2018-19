@@ -103,7 +103,7 @@ df1.plot(kind='bar',title='Bar Graph: Representation of top 10 countries',x='Cou
 df1=df[['ID','Year']].copy()
 length1 = len(df1) 
 df1.sort_values('ID',inplace=True)
-df1.drop_duplicates(keep=False,inplace=True)
+df1=df1.drop_duplicates(subset='ID')
 length2 = len(df1) 
 print('Difference after removing duplicates:',' ',length1,' ',length2)
 df1=df1.groupby(['Year']).size()
@@ -151,6 +151,40 @@ df1.sort_values('Name',inplace=True,ascending=True)
 print('Players with their individual weight higher than the average weight, and who have won medals:')
 for i in df1.values:
         print(i[0])
+        
+#Solve Query18
+df1=df[['City','Year']].copy()
+df1=df1.groupby(['City','Year']).count()
+df1=df1.groupby(['City']).size()
+df1=df1.reset_index()
+df1.columns=['City','Year']
+df1.sort_values('Year',inplace=True,ascending=False)
+df1=df1.head(10)
+print('Cities where the olympics have been hosted the most number of times')
+
+#Solve Query19
+print('First year of event:',df.Year.min())
+print('Last year of event:',df.Year.max())
+print('Difference:',((df.Year.max())-(df.Year.min())))
+df1=df[['ID','Name','Year','Height','Weight']].copy()
+df1=df1.drop_duplicates(subset='ID')
+df1=df1.drop_duplicates(subset='Name')
+df1.sort_values('Name',inplace=True,ascending=True)
+df10=df1[(df1.Year < 1906) & (df1.Year >= 1896)]
+df20=df1[(df1.Year < 1916) & (df1.Year >= 1906)]
+df30=df1[(df1.Year < 1926) & (df1.Year >= 1916)]
+df40=df1[(df1.Year < 1936) & (df1.Year >= 1926)]
+df50=df1[(df1.Year < 1946) & (df1.Year >= 1936)]
+df60=df1[(df1.Year < 1956) & (df1.Year >= 1946)]
+df70=df1[(df1.Year < 1966) & (df1.Year >= 1956)]
+df80=df1[(df1.Year < 1976) & (df1.Year >= 1966)]
+df90=df1[(df1.Year < 1986) & (df1.Year >= 1976)]
+df100=df1[(df1.Year < 1996) & (df1.Year >= 1986)]
+df110=df1[(df1.Year < 2006) & (df1.Year >= 1996)]
+df120=df1[(df1.Year <= 2016) & (df1.Year >= 2006)]
+
+print('Average Height over the years from 1896 to 2016 - intervals of 10 years:',int(df10.Height.mean()),'cm',int(df20.Height.mean()),'cm',int(df30.Height.mean()),'cm',int(df40.Height.mean()),'cm',int(df50.Height.mean()),'cm',int(df60.Height.mean()),'cm',int(df70.Height.mean()),'cm',int(df80.Height.mean()),'cm',int(df90.Height.mean()),'cm',int(df100.Height.mean()),'cm',int(df110.Height.mean()),'cm',int(df120.Height.mean()),'cm')
+print('Average Weight over the years from 1896 to 2016 - intervals of 10 years:',int(df10.Weight.mean()),’kg’,int(df20.Weight.mean()),’kg’,int(df30.Weight.mean()),’kg’,int(df40.Weight.mean()),’kg’,int(df50.Weight.mean()),’kg’,int(df60.Weight.mean()),’kg’,int(df70.Weight.mean()),’kg’,int(df80.Weight.mean()),’kg’,int(df90.Weight.mean()),’kg’,int(df100.Weight.mean()),’kg’,int(df110.Weight.mean()),’kg’,int(df120.Weight.mean()),’kg’)
 
 
 
