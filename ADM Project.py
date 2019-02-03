@@ -130,6 +130,28 @@ for i in df1.values:
 
 df1.plot(kind='bar',title='Bar Graph: Highest participation over the years',x='Name',y='SportsPlayed',legend=False)
 
+#Solve Query16
+df1=df[['Name','Sport','Height','Medal']].copy()
+df1=df1[(df1.Sport =='Swimming') & (df1.Medal != 'Participated')]
+meanheight=df1['Height'].mean()
+df1=df1[df1.Height>meanheight]
+df1=df1.drop_duplicates(subset='Name')
+df1.sort_values('Name',inplace=True,ascending=True)
+print('Players with their individual height higher than the average height, and who have won medals:')
+for i in df1.values:
+        print(i[0])
+        
+#Solve Query17
+df1=df[['Name','Sport','Weight','Medal']].copy()
+df1=df1[(df1.Sport =='Weightlifting') & (df1.Medal != 'Participated')]
+meanweight=df1['Weight'].mean()
+df1=df1[df1.Weight>meanweight]
+df1=df1.drop_duplicates(subset='Name')
+df1.sort_values('Name',inplace=True,ascending=True)
+print('Players with their individual weight higher than the average weight, and who have won medals:')
+for i in df1.values:
+        print(i[0])
+
 
 
 
