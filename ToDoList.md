@@ -19,3 +19,5 @@ To-do list:
 13. Top 5 players:Maximum representation by number of years (Done)
 14. Top 5 players:Youngest and Oldest players (Done)
 15. Players with most number of sports participated (distinct) (Done)
+16. Players who have won medals in Swimming and their height is above the average height
+17. Players who have won medals in Weightlifting and their weight is above the average weight
