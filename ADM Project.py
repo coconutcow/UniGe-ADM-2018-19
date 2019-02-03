@@ -154,7 +154,7 @@ for i in df1.values:
         
 #Solve Query18
 df1=df[['City','Year']].copy()
-df1=df1.groupby(['City','Year']).count()
+df1=df1.groupby(['City','Year']).size()
 df1=df1.groupby(['City']).size()
 df1=df1.reset_index()
 df1.columns=['City','Year']
@@ -184,7 +184,8 @@ df110=df1[(df1.Year < 2006) & (df1.Year >= 1996)]
 df120=df1[(df1.Year <= 2016) & (df1.Year >= 2006)]
 
 print('Average Height over the years from 1896 to 2016 - intervals of 10 years:',int(df10.Height.mean()),'cm',int(df20.Height.mean()),'cm',int(df30.Height.mean()),'cm',int(df40.Height.mean()),'cm',int(df50.Height.mean()),'cm',int(df60.Height.mean()),'cm',int(df70.Height.mean()),'cm',int(df80.Height.mean()),'cm',int(df90.Height.mean()),'cm',int(df100.Height.mean()),'cm',int(df110.Height.mean()),'cm',int(df120.Height.mean()),'cm')
-print('Average Weight over the years from 1896 to 2016 - intervals of 10 years:',int(df10.Weight.mean()),’kg’,int(df20.Weight.mean()),’kg’,int(df30.Weight.mean()),’kg’,int(df40.Weight.mean()),’kg’,int(df50.Weight.mean()),’kg’,int(df60.Weight.mean()),’kg’,int(df70.Weight.mean()),’kg’,int(df80.Weight.mean()),’kg’,int(df90.Weight.mean()),’kg’,int(df100.Weight.mean()),’kg’,int(df110.Weight.mean()),’kg’,int(df120.Weight.mean()),’kg’)
+print('Average Weight over the years from 1896 to 2016 - intervals of 10 years:',int(df10.Weight.mean()),'kg',int(df20.Weight.mean()),'kg',int(df30.Weight.mean()),'kg',int(df40.Weight.mean()),'kg',int(df50.Weight.mean()),'kg',int(df60.Weight.mean()),'kg',int(df70.Weight.mean()),'kg',int(df80.Weight.mean()),'kg',int(df90.Weight.mean()),'kg',int(df100.Weight.mean()),'kg',int(df110.Weight.mean()),'kg',int(df120.Weight.mean()),'kg')
+
 
 
 
