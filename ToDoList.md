@@ -8,10 +8,9 @@ To-do list:
 5.	Highlight the ratio of the male to female participation:Over the years(games) - Overall (Done)
 6.  Highlight the ratio of the male to female participation:Over the years (games) - By Country (Done)
 7.	Representation of every country in each sport – highest and lowest (Done)
-Bar Graph: Top 10 participating countries:
-    8. For each session (Done)
-    9. Over the years (Done)
-    10. Bar Graph of highest participation by years - Top 10 (Done)
+8. Bar Graph: Top 10 participating countries: For each session (Done)
+9. Bar Graph: Top 10 participating countries: Over the years (Done)
+10. Bar Graph: Top 10 participating countries: Bar Graph of highest participation by years - Top 10 (Done)
 11.	Plot a bar graph of the top 5 (by country) average weights and heights (Done)
 12. Top 5 players:By medal count, and also give the breakup of which medals were won (Done)
 13. Top 5 players:Won gold medal (Done)
