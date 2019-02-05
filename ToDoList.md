@@ -8,18 +8,19 @@ To-do list:
 5.	Highlight the ratio of the male to female participation:Over the years(games) - Overall (Done)
 6.  Highlight the ratio of the male to female participation:Over the years (games) - By Country (Done)
 7.	Representation of every country in each sport – highest and lowest (Done)
+8-10.	Bar Graph: Top 10 participating countries:
+    8. For each session (Done)
+    9. Over the years (Done)
+    10. Bar Graph of highest participation by years - Top 10 (Done)
+11.	Plot a bar graph of the top 5 (by country) average weights and heights (Done)
+12. Top 5 players:By medal count, and also give the breakup of which medals were won (Done)
+13. Top 5 players:Won gold medal (Done)
+14. Top 5 players:Maximum representation by number of years (Done)
+15. Top 5 players:Youngest and Oldest players (Done)
+16. Players with most number of sports participated (distinct) (Done)
+17. Players who have won medals in Swimming and their height is above the average height
+18. Players who have won medals in Weightlifting and their weight is above the average weight
+19. City where the olympics have been hosted the most number of times
+20. Average Height and Weight of the players over intervals of 10 years
+
 8.	Plot the trendline of the number of participants over the years
-9.	Bar Graph: Top 10 participating countries:
-    A. For each session (Done)
-    B. Over the years (Done)
-    C. Bar Graph of highest participation by years - Top 10 (Done)
-10.	Plot a bar graph of the top 5 (by country) average weights and heights (Done)
-11. Top 5 players:By medal count, and also give the breakup of which medals were won (Done)
-12. Top 5 players:Won gold medal (Done)
-13. Top 5 players:Maximum representation by number of years (Done)
-14. Top 5 players:Youngest and Oldest players (Done)
-15. Players with most number of sports participated (distinct) (Done)
-16. Players who have won medals in Swimming and their height is above the average height
-17. Players who have won medals in Weightlifting and their weight is above the average weight
-18. City where the olympics have been hosted the most number of times
-19. Average Height and Weight of the players over intervals of 10 years
