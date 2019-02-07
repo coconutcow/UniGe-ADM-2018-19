@@ -429,7 +429,11 @@ dfp.to_csv("cDataSet.csv", sep = ';')
 
 spark = SparkSession.builder.appName("ADM").getOrCreate()
 
-df = None #spark.read.csv("C:/Users/humbe/Desktop/ADM Final Project/cDataSet.csv",inferSchema = True, header=True, sep = ";")
+df = None 
+
+#df = spark.read.csv("C:/Users/humbe/Desktop/ADM Final Project/cDataSet.csv",inferSchema = True, header=True, sep = ";")
+#main(df)
+
 while df is None:
     try:
         filepath = input("Enter filepath of dataset, quit with 'q':")
