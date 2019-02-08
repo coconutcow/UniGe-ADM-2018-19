@@ -484,7 +484,7 @@ def main(df):
 spark = SparkSession.builder.appName("ADM").getOrCreate()
 
 df = None 
-#df = spark.read.csv("C:/Users/humbe/Desktop/ADM Final Project/cDataSet.csv",inferSchema = True, header=True, sep = ";")
+#df = spark.read.csv("C:/Users/humbe/Desktop/ADM Final Project/DataSetFinal.csv",inferSchema = True, header=True, sep = ";")
 #main(df)
 
 while df is None:
