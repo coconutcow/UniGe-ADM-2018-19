@@ -65,25 +65,27 @@ def plot_feature(data,yl = 'Features',xl = 'Feature measurements', t = 'Feature 
     d_feature = data[:,0]
     d_value = data[:,1]
     
-    ind = np.arange(len(d_feature))
-    values = np.array([float(i) for i in d_value])
+    N = len(d_feature)
+    ind = np.arange(N)
     w = 0.75
+    values = np.array([float(i) for i in d_value])
     
-    plt.subplots(figsize=(20, 10))
+    plt.figure(figsize =(20,10))
     if bar:
         plt.bar(ind,values,align='center',width = w)
         for i in ind:
             plt.text(i-w/3,values[i],round(values[i],2),fontsize=16)
     else:
         plt.plot(ind,values)
-    plt.xticks(ind,d_feature)
+    plt.xticks(ind,d_feature,rotation = 15)
     plt.ylabel(yl)
     plt.xlabel(xl)
     plt.title(t)
-    plt.show
+    #plt.show
+    
     return None
 
-def plot_bsg_distribution(b,s,g,athletes):
+def plot_bsg_distribution(b,s,g,athletes,t = ''):
     """
     Inputs, all numpy arrays
     b,s,g: bronze, silver, gold array of form [[athlete name, medal count],...]
@@ -126,19 +128,26 @@ def plot_bsg_distribution(b,s,g,athletes):
                  bottom=count_silver+count_bronze)
 
     plt.ylabel('Medals')
-    plt.title('Athletes with the highest medal count')
+    plt.title(t)
     plt.xticks(ind, athletes,rotation=10)
     plt.legend((p3[0], p2[0], p1[0]), ('Gold', 'Silver', 'Bronze'))
     plt.show()
     return None
 
 def query1(df):
-    print("Query 1 - Enlist the number of medals won by each country by each session")
-    df.select("Country","Games","Medal").filter(~df.Medal.isin(["Participated"])).groupBy("Country","Games","Medal").count().orderBy(["Country","Games","Medal"]).show()
+    print(query_text[1])
+    q1 = df.select("Country","Games","Medal").filter(~df.Medal.isin(["Participated"]))
+    countries = input("To filter by country enter comma separated countries, just enter otherwise:")
+    years = input("To filter by year enter comma separated years, just press enter otherwise:")
+    if countries != "":
+        q1 = q1.filter(df.Country.isin(countries.split(",")))
+    if years != "":
+        q1 = q1.filter(df.Year.isin(years.split(",")))
+    q1.groupBy("Country","Games","Medal").count().orderBy(["Country","Games","Medal"]).show(40)
     return None
 
 def query2(df):
-    print("Query 2 - Highlight which countries dominate each of the two sessions")
+    print(query_text[2])
     q2 = df.select("Country","Season","Medal").filter(~df.Medal.isin(["Participated"])).groupBy("Country","Season").count().orderBy("count", ascending = False)
     print("Highest medal counts so far in Summer Games:")
     q2.filter(df.Season.isin(["Summer"])).limit(5).withColumnRenamed("count","Medal Count").show()
@@ -147,7 +156,7 @@ def query2(df):
     return None
 
 def query3(df):
-    print("Query 3: Total medal distribution over the years")
+    print(query_text[3])
     q3 = df.select("Year","Medal","Season").filter(~df.Medal.isin(["Participated"])).groupBy("Year","Season").count().withColumnRenamed("count","Medals won").orderBy("Year")
     print("Summer:")
     s = q3.filter(q3.Season == "Summer").select("Year","Medals won")
@@ -158,7 +167,7 @@ def query3(df):
     return None
 
 def query4(df):
-    print("Query 4: Highest medals won so far and lowest medals won so far")
+    print(query_text[4])
     q4 = df.select("Country","Year","Medal").filter(~df.Medal.isin(["Participated"])).groupBy("Country").count()
     print("Highest medals won so far:")
     q4.orderBy("count", ascending = False).limit(5).show()
@@ -167,7 +176,7 @@ def query4(df):
     return None
 
 def query5(df):
-    print("Query 5 - Highlight the ratio of female to male participation over the years")
+    print(query_text[5])
     q5 = df.groupBy("Sex","Year","Season").count().sort("Year","Sex")
     years = df.select("Year","Season").distinct().sort("Year")
     
@@ -185,7 +194,7 @@ def query5(df):
     return None
 
 def query6(df):
-    print("Query 6 - Highlight the ratio of female to male participation amongst top participating countries")
+    print(query_text[6])
     countries = np.array(df.groupBy("Country").count().orderBy("count",ascending = False).limit(20).select("Country").collect())
     countries = [i[0] for i in countries]
     q6 = df.groupBy("Sex","Country").count()
@@ -196,7 +205,7 @@ def query6(df):
     return None
 
 def query7(df):
-    print("Query 7 - Representation of every country in each sport")
+    print(query_text[7])
     q7 = df.select("ID","Country","Year","Sport")
     l1 = q7.count()
     q7 = q7.dropDuplicates()
@@ -210,8 +219,8 @@ def query7(df):
     return None
     
 def query8(df):
-    print("Query 8 - Bar Graph: Top 10 participating countries for each session")
-    q8 = df.select("ID","Country","Season","Sport").orderBy("ID")
+    print(query_text[8])
+    q8 = df.select("ID","Country","Season","Sport","Year").orderBy("ID")
     l1 = q8.count()
     q8 = q8.dropDuplicates()
     l2 = q8.count()
@@ -220,22 +229,25 @@ def query8(df):
     dfs = np.array(q8.filter(q8.Season == "Summer").orderBy("Representation", ascending = False).limit(10).select("Country","Representation").collect())
     dfw = np.array(q8.filter(q8.Season == "Winter").orderBy("Representation", ascending = False).limit(10).select("Country","Representation").collect())
     plot_feature(dfs,yl = 'Representation',xl = 'Country', t = 'Bar Graph Summer: Representation of top 10 countries')
+    plt.show()
     plot_feature(dfw,yl = 'Representation',xl = 'Country', t = 'Bar Graph Winter: Representation of top 10 countries')
+    plt.show()
     return None
 
 def query9(df):
-    print("Query 9 - Bar Graph: Top 10 participating countries all time")
-    q9 = df.select("ID","Country","Year")
+    print(query_text[9])
+    q9 = df.select("ID","Country","Year","Sport")
     l1 = q9.count()
     q9 = q9.dropDuplicates()
     l2 = q9.count()
     print('Difference after removing duplicates:',' ',l1,' ',l2)
     q9 = np.array(q9.groupBy("Country").count().withColumnRenamed("count","Representation").orderBy("Representation", ascending = False).limit(10).collect())
     plot_feature(q9,yl = 'Representation',xl = 'Country', t = 'Bar Graph: Representation of top 10 countries')
+    plt.show()
     return None
 
 def query10(df):
-    print("Query 10 - Bar Graph: highest participation over the years, Line Graph: participation over the years")
+    print(query_text[10])
     q10 = df.select("ID","Year","Season")
     l1 = q10.count()
     q10 = q10.dropDuplicates()
@@ -245,17 +257,20 @@ def query10(df):
     q10hs = np.array(q10s.orderBy("Representation", ascending = False).limit(10).orderBy("Year", ascending = True).collect())
     q10as = np.array(q10s.orderBy("Year", ascending = True).collect())
     plot_feature(q10hs,yl = 'Representation',xl = 'Year', t = 'Bar Graph: Highest participation over the years (Summer)')
+    plt.show()
     plot_feature(q10as,yl = 'Representation',xl = 'Year', t = 'Line Graph: Participation over the years (Summer)',bar = False)
-    
+    plt.show()
     q10w = q10.filter(q10.Season == "Winter").groupBy("Year").count().withColumnRenamed("count","Representation")
     q10hw = np.array(q10w.orderBy("Representation", ascending = False).limit(10).orderBy("Year", ascending = True).collect())
     q10aw = np.array(q10w.orderBy("Year", ascending = True).collect())
     plot_feature(q10hw,yl = 'Representation',xl = 'Year', t = 'Bar Graph: Highest participation over the years (Winter)')
+    plt.show()
     plot_feature(q10aw,yl = 'Representation',xl = 'Year', t = 'Line Graph: Participation over the years (Winter)',bar = False)
+    plt.show()
     return None
 
 def query11(df):
-    print("Query 11 - Highest and lowest 10 (by country) average weights and heights")
+    print(query_text[11])
     q11 = df.groupBy("Country")
     w = q11.agg(F.mean("Weight"))
     h = q11.agg(F.mean("Height"))
@@ -272,7 +287,7 @@ def query11(df):
     return None
 
 def query12(df):
-    print("Query 12 - Top 10 athletes by medal count, and medal breakdown")
+    print(query_text[12])
     medals = ["Gold","Silver","Bronze"]
     q12 = df.filter(df.Medal.isin(medals))
     athletes = [i[0] for i in q12.groupBy("Name").count().orderBy("count",ascending = False).limit(10).select("Name").collect()]
@@ -280,16 +295,16 @@ def query12(df):
     q12g = np.array(q12.filter(df.Medal == medals[0]).select("Name","count").collect())
     q12s = np.array(q12.filter(df.Medal == medals[1]).select("Name","count").collect())
     q12b = np.array(q12.filter(df.Medal == medals[2]).select("Name","count").collect())
-    plot_bsg_distribution(q12b,q12s,q12g,np.array(athletes))
+    plot_bsg_distribution(q12b,q12s,q12g,np.array(athletes),t = "Athletes with the highest medal count")
     return None
 
 def query13(df):
-    print("Query 13 - Top 10 gold medal winners")
+    print(query_text[13])
     df.filter(df.Medal == "Gold").groupBy("Name").count().orderBy("count",ascending = False).limit(10).withColumnRenamed("count","Gold medals").show(truncate = False)
     return None
 
 def query14(df):
-    print("Query 14 - Top 10 athletes with most years participated")
+    print(query_text[14])
     q14 = df.select("Name","Year")
     athletes = [i[0] for i in q14.dropDuplicates().groupBy("Name").count().orderBy("count",ascending = False).limit(10).collect()]
     q14 = q14.filter(df.Name.isin(athletes)).distinct().orderBy("Year").groupBy('Name').agg(F.collect_list("Year"))
@@ -297,7 +312,7 @@ def query14(df):
     return None
 
 def query15(df):
-    print("Query 15 - Youngest and oldest athletes of all time")
+    print(query_text[15])
     dropSport = ["Art Competitions"]
     print("Top 10 youngest athletes")
     df.groupBy("Name","Age","Year","Sport").count().orderBy("Age", ascending = True).select("Name","Age","Year","Sport").limit(10).show(truncate = False)
@@ -306,17 +321,18 @@ def query15(df):
     return None
 
 def query16(df):
-    print("Query 16 - Top 10 athletes with most number of sports participated")
-    q14 = df.select("Name","Sport")
-    athletes = [i[0] for i in q14.dropDuplicates().groupBy("Name").count().orderBy("count",ascending = False).limit(10).collect()]
-    q14 = q14.filter(df.Name.isin(athletes)).distinct().orderBy("Sport").groupBy('Name').agg(F.collect_list("Sport"))
+    print(query_text[16])
+    q14 = df.select("ID","Name","Sport")
+    ids = [i[0] for i in q14.dropDuplicates().groupBy("ID").count().orderBy("count",ascending = False).limit(10).collect()]
+    q14 = q14.filter(df.ID.isin(ids)).select("Name","Sport").distinct().orderBy("Sport").groupBy('Name').agg(F.collect_list("Sport"))
     q14 = q14.orderBy(F.size("collect_list(Sport)"), ascending = False).select("Name",F.size("collect_list(Sport)").alias("Total sports"),F.col("collect_list(Sport)").alias("Sports"))
     q14.show(truncate = False)
     plot_feature(np.array(q14.select("Name","Total sports").collect()),yl = 'Sports',xl = 'Athlete', t = 'Bar Graph: Athletes thats participated in the largest variety of sports')
+    plt.show()
     return None
 
 def query17(df):
-    print('Query 17 - Swimmers with higher than the average height who have won medals')
+    print(query_text[17])
     meanh = df.select(F.avg("Height")).collect()[0][0]
     q17 = df.select("Name","Sport","Height","Medal").filter(df.Sport == "Swimming").filter(~(df.Medal == "Participated")).dropDuplicates(["Name"])
     percentage = q17.count()
@@ -327,7 +343,7 @@ def query17(df):
     return None
 
 def query18(df):
-    print('Query 18 - Weightlifters with higher than the average weight who have won medals')
+    print(query_text[18])
     meanh = df.select(F.avg("Weight")).collect()[0][0]
     q17 = df.select("Name","Sport","Weight","Medal").filter(df.Sport == "Weightlifting").filter(~(df.Medal == "Participated")).dropDuplicates(["Name"])
     percentage = q17.count()
@@ -338,7 +354,7 @@ def query18(df):
     return None
 
 def query19(df):
-    print("Query 19 - Cities where the olympics have been hosted the most number of times")
+    print(query_text[19])
     q19 = df.select("City","Year").dropDuplicates()
     cities = [i[0] for i in q19.groupBy("City").count().orderBy("count",ascending = False).limit(5).collect()]
     q19 = q19.filter(df.City.isin(cities)).orderBy("Year").groupBy('City').agg(F.collect_list("Year"))
@@ -347,7 +363,7 @@ def query19(df):
     return None
 
 def query20(df):
-    print("Query 20- Average height and weight of athletes over 10 year intervals")
+    print(query_text[20])
     f = df.select(F.min("Year")).collect()[0][0]
     l = df.select(F.max("Year")).collect()[0][0]
     print("First year of event:",f)
@@ -372,65 +388,102 @@ def query20(df):
     print("Average weights over the years from 1896 to 2016 - interval of 10 years:",w)
     return None
 
-def main(df):
-    query_dict = {'1':query1,'2':query2,'3':query3,'4':query4,'5':query5,
-                  '6':query6,'7':query7,'8':query8,'9':query9,'10':query10,
-                  '11':query11,'12':query12,'13':query13,'14':query14,'15':query15,
-                  '16':query16,'17':query17,'18':query18,'19':query19,'20':query20}
+def query21(df):
+    print(query_text[21])
+    q21 = df.select("Country","Sport","Year","Medal").filter(df.Sport == "Art Competitions")
+    q21 = q21.filter(~(df.Medal == "Participated"))
     
+    print("Art competitions where held in the following years:\n"+", ".join([str(i[0]) for i in q21.select("Year").dropDuplicates().orderBy("Year").collect()]))
+    print("\nTop 10 countries by medal count in art competitions:")
+    q21.groupBy("Country").count().orderBy("count",ascending = False).limit(10).withColumnRenamed("count","Medals won").show()
+    print("Medal distribution in 1936")
+    
+    q21 = q21.filter(df.Year == 1936)
+    countries = [i[0] for i in q21.groupBy("Country").count().orderBy("count",ascending = False).limit(10).select("Country").collect()]
+    q21 = q21.filter(q21.Country.isin(countries)).groupBy("Country","Medal").count()
+    q21g = np.array(q21.filter(df.Medal == "Gold").select("Country","count").collect())
+    q21s = np.array(q21.filter(df.Medal == "Silver").select("Country","count").collect())
+    q21b = np.array(q21.filter(df.Medal == "Bronze").select("Country","count").collect())
+    plot_bsg_distribution(q21b,q21s,q21g,np.array(countries),t = "Countries with the highest medal count in the 1936 Art Competitions")
+    return None
+
+
+def query22(df):
+    print(query_text[22])
+    q22 = df.filter(df.Season == "Summer").select("Year","Sport","Event")
+    s = q22.select("Year","Sport").dropDuplicates().groupBy("Year").count().orderBy("Year").withColumnRenamed("count","Sports")
+    e = q22.select("Year","Event").dropDuplicates().groupBy("Year").count().orderBy("Year").withColumnRenamed("count","Events").withColumnRenamed("Year","Y")
+    s.join(e,s.Year == e.Y).select("Year","Sports","Events").show(s.count())
+    plot_feature(np.array(s.collect()),yl = 'Sports',xl = 'Year', t = 'Line Graph: Sport variety over the years',bar = False)
+    plt.show()
+    plot_feature(np.array(e.collect()),yl = 'Events',xl = 'Year', t = 'Line Graph: Event variety over the years',bar = False)
+    plt.show()
+    return None
+
+def query23(df):
+    print(query_text[23])
+    q23 = df.filter(df.Season == "Winter").select("Year","Sport","Event")
+    s = q23.select("Year","Sport").dropDuplicates().groupBy("Year").count().orderBy("Year").withColumnRenamed("count","Sports")
+    e = q23.select("Year","Event").dropDuplicates().groupBy("Year").count().orderBy("Year").withColumnRenamed("count","Events").withColumnRenamed("Year","Y")
+    s.join(e,s.Year == e.Y).select("Year","Sports","Events").show(s.count())
+    plot_feature(np.array(s.collect()),yl = 'Sports',xl = 'Year', t = 'Line Graph: Sport variety over the years',bar = False)
+    plt.show()
+    plot_feature(np.array(e.collect()),yl = 'Events',xl = 'Year', t = 'Line Graph: Event variety over the years',bar = False)
+    plt.show()
+    return None
+
+"""
+Next query workspace
+"""
+
+query_text = ["",
+              "Query 1  - Enlist the number of medals won by each country by each session",
+              "Query 2  - Highlight which countries dominate each of the two sessions",
+              "Query 3  - Total medal distribution over the years",
+              "Query 4  - Highest and lowest medal count so far by country",
+              "Query 5  - Highlight the ratio of female to male participation over the years",
+              "Query 6  - Highlight the all time ratio of female to male participation amongst top participating countries",
+              "Query 7  - Representation of every country in each sport",
+              "Query 8  - Bar Graph: Top 10 participating countries for each session",
+              "Query 9  - Bar Graph: Top 10 participating countries all time",
+              "Query 10 - Bar Graph: highest participation over the years, Line Graph: participation over the years",
+              "Query 11 - Highest and lowest 10 (by country) average weights and heights",
+              "Query 12 - Top 10 athletes by medal count, and medal breakdown",
+              "Query 13 - Top 10 gold medal winners",
+              "Query 14 - Top 10 athletes with most years participated",
+              "Query 15 - Youngest and oldest athletes of all time",
+              "Query 16 - Top 10 athletes with most number of sports participated",
+              "Query 17 - Swimmers with higher than the average height who have won medals",
+              'Query 18 - Weightlifters with higher than the average weight who have won medals',
+              "Query 19 - Cities where the olympics have been hosted the most number of times",
+              "Query 20 - Average height and weight of athletes over 10 year intervals",
+              "Query 21 - Various details on olympic art competitions",
+              "Query 22 - Summer olympics sport and event diversity through the years",
+              "Query 23 - Winter olympics sport and event diversity through the years"]
+
+query_dict = {'1':query1,  '2':query2,  '3':query3,  '4':query4,  '5':query5,
+              '6':query6,  '7':query7,  '8':query8,  '9':query9,  '10':query10,
+              '11':query11,'12':query12,'13':query13,'14':query14,'15':query15,
+              '16':query16,'17':query17,'18':query18,'19':query19,'20':query20,
+              '21':query21,'22':query22,'23':query23}
+
+def main(df):
+
     while True:
-        inp = input("Enter query #(1-20) to execute, 'h' to list the queries, or 'q' to quit:")
+        inp = input("Enter query #(1-23) to execute, 'h' to list the queries, or 'q' to quit:")
         if inp == 'q':
             break
         elif inp == 'h':
-            print("Query 1  - Enlist the number of medals won by each country by each session")
-            print("Query 2  - Highlight which countries dominate each of the two sessions")
-            print("Query 3  - Total medal distribution over the years")
-            print("Query 4  - Highest medals won so far and lowest medals won so far")
-            print("Query 5  - Highlight the ratio of female to male participation over the years")
-            print("Query 6  - Highlight the ratio of female to male participation amongst top participating countries")
-            print("Query 7  - Representation of every country in each sport")
-            print("Query 8  - Bar Graph: Top 10 participating countries for each session")
-            print("Query 9  - Bar Graph: Top 10 participating countries all time")
-            print("Query 10 - Bar Graph: highest participation over the years, Line Graph: participation over the years")
-            print("Query 11 - Highest and lowest 10 (by country) average weights and heights")
-            print("Query 12 - Top 10 athletes by medal count, and medal breakdown")
-            print("Query 13 - Top 10 gold medal winners")
-            print("Query 14 - Top 10 athletes with most years participated")
-            print("Query 15 - Youngest and oldest athletes of all time")
-            print("Query 16 - Top 10 athletes with most number of sports participated")
-            print('Query 17 - Swimmers with higher than the average height who have won medals')
-            print('Query 18 - Weightlifters with higher than the average weight who have won medals')
-            print("Query 19 - Cities where the olympics have been hosted the most number of times")
-            print("Query 20 - Average height and weight of athletes over 10 year intervals")
+            for i in query_text:
+                print(i)
         elif inp in query_dict:
             query_dict[inp](df)
     return None
 
-"""
-#Importing the Dataframe
-dfp = pd.read_csv("DataSet1.csv")
-
-#Data Cleansing
-print('Before:\n',dfp.isnull().sum()/len(dfp)*100)
-dfp.replace('NA',np.NaN)
-dfp['Country'].replace('NaN','Singapore',inplace=True)
-dfp['Age'].fillna(dfp['Age'].mean(), inplace=True)
-dfp['Height'].fillna(dfp['Height'].mean(), inplace=True)
-dfp['Weight'].fillna(dfp['Weight'].mean(), inplace=True)
-dfp['Country'].fillna('Singapore',inplace=True)
-dfp['Medal'].fillna('Participated',inplace=True)
-print('After:\n',dfp.isnull().sum()/len(dfp)*100)
-
-dfp.to_csv("cDataSet.csv", sep = ';')
-"""
-
 #Start spark
-
 spark = SparkSession.builder.appName("ADM").getOrCreate()
 
 df = None 
-
 #df = spark.read.csv("C:/Users/humbe/Desktop/ADM Final Project/cDataSet.csv",inferSchema = True, header=True, sep = ";")
 #main(df)
 
@@ -446,4 +499,3 @@ while df is None:
         pass
 
 spark.stop()
-
