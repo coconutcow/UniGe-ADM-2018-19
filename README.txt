@@ -1,8 +1,10 @@
-Run the file ADM_Project_Final.py
+Code utilizes findspark and pyspark and requires environmental variables for spark and java homes.
 
-Enter the filepath of the given dataset when requested. 
+Run ADM_Project_Final.py as all the required code is contained in this python file.
+
+Enter the filepath of the given dataset 'DataSetFinal.csv' when requested. 
 If issues concerning filepath format arise in the python file try adding the filepath as shown 
-in the spark.read.csv function in line 434 and then running line 435.
+in the spark.read.csv function in line 487 and then running line 488.
 
-Upon succesful filepath entry and having the dataframe enter a query #(1-20) to execute the query,
+Upon succesful filepath entry and having the dataframe enter a query #(1-23) to execute the query,
 'h' to list the queries, or 'q' to quit.
