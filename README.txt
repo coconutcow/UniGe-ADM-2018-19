@@ -11,7 +11,7 @@ Enter the filepath of the given dataset 'DataSetFinal.csv' when requested.
 If issues concerning filepath format arise in the python file try adding the filepath as shown 
 in the spark.read.csv function in line 487 and then running line 488.
 
-Upon succesful filepath entry and having the dataframe enter a query #(1-23) to execute the query,
+Upon succesful filepath entry and dataframe creation when requested enter a query #(1-23) to execute the query,
 'h' to list the queries, or 'q' to quit.
 
 
