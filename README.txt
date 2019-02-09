@@ -1,7 +1,7 @@
 Shareable drive link with the dataset
 https://drive.google.com/open?id=1rcVxQrDHRemVmXrIE9BP7nX3MMdaet8V
 
-<b>For ADM_Project_Final.py<\b>:
+For ADM_Project_Final.py:
 Code utilizes findspark and pyspark and requires environmental variables for spark and java homes.
 Developed on our local machines to utilize python libraries such as matplotlib.
 
