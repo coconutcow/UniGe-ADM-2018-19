@@ -14,6 +14,10 @@ in the spark.read.csv function in line 487 and then running line 488.
 Upon succesful filepath entry and having the dataframe enter a query #(1-23) to execute the query,
 'h' to list the queries, or 'q' to quit.
 
+
+
+
+
 For olympics.py:
 Code runs in the university cluster utilizing pyspark.
 
