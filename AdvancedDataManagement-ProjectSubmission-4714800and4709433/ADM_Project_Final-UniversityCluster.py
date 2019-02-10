@@ -7,7 +7,7 @@ import sys
 if __name__ == "__main__":
     # Check the number of arguments
     if len(sys.argv) != 2:
-        print("Usage: 'olympics <query #>' to execute a query or 'olympics h' to list available queries", file=sys.stderr)
+        print("Usage: 'ADM_Project_Final-UniversityCluster <query #>' to execute a query or 'ADM_Project_Final-UniversityCluster h' to list available queries", file=sys.stderr)
         exit(-1)
 
 query_text = ["",
