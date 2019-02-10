@@ -21,5 +21,3 @@ To-do list:
 18. Players who have won medals in Weightlifting and their weight is above the average weight
 19. City where the olympics have been hosted the most number of times
 20. Average Height and Weight of the players over intervals of 10 years
-
-21.	Plot the trendline of the number of participants over the years
